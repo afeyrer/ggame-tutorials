@@ -17,7 +17,7 @@ ball = Sprite(ball_asset, (0, 0))
 # Original image is too big. Scale it to 1/10 its original size
 ball.scale = 0.1
 # custom attributes
-ball.dir = 1000
+ball.dir = 4
 ball.go = True
 def reverse(b):
     b.dir *= -1
@@ -28,6 +28,31 @@ def step():
         if ball.x + ball.width > SCREEN_WIDTH or ball.x < 0:
             ball.x -= ball.dir
             reverse(ball)
+            
+            
+pew1_asset = SoundAsset("sounds/pew1.mp3")
+pew1 = Sound(pew1_asset)
+pop_asset = SoundAsset("sounds/reappear.mp3")
+pop = Sound(pop_asset)
 
+
+# Handle the space key
+def spaceKey(event):
+    ball.go = not ball.go
+
+# Handle the "reverse" key
+def reverseKey(event):
+    reverse(ball)
+    pop.play()
+
+# Handle the mouse click
+def mouseClick(event):
+    ball.x = event.x
+    ball.y = event.y
+    pew1.play()
+    
 myapp = App(SCREEN_WIDTH,SCREEN_HEIGHT)
 myapp.run(step)
+myapp.listenKeyEvent('keydown', 'space', spaceKey)
+myapp.listenKeyEvent('keydown', 'r', reverseKey)
+myapp.listenMouseEvent('click', mouseClick)
